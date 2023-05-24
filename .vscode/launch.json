@@ -1,0 +1,10 @@
+{
+  "configurations": [
+    {
+      "type": "chrome",
+      "name": "http://localhost:3000/statmap?width=600&height=600&zoom=12&center=18.034058,59.349296&style=enirovector&type=png",
+      "request": "launch",
+      "url": "http://localhost:3000/statmap?width=600&height=600&zoom=12&center=18.034058,59.349296&style=enirovector&type=png"
+    }
+  ]
+}

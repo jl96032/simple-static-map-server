@@ -1,8 +1,11 @@
+#!/usr/bin/env node
+
 const express = require('express');
 const app = express();
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
+const { Map, NavigationControl, Marker } = require('maplibre-gl') 
 
 const port = process.env.PORT || 3000;
 
@@ -68,7 +71,11 @@ async function launchStyleTab(browser, { name, styleUrl, rasterTiles, attributio
 async function launchBrowser(styles) {
   const browser = await puppeteer.launch({
     headless: false,
-    args: ['--headless', '--hide-scrollbars', '--mute-audio', '--use-gl=egl'],
+    args: [
+      '--headless', 
+      '--hide-scrollbars',
+      '--mute-audio', 
+      '--use-gl=egl'],
   });
   console.log('Preparing tabs for styles…');
   return await Promise.all(styles.map(style => launchStyleTab(browser, style)));
@@ -91,7 +98,18 @@ async function fetchPicture(page, { width, height, center, zoom, type, timeout }
       try {
         // will throw an exception if center coordinates are invalid
         map.jumpTo(view);
-        return null;
+        marker.setLngLat([18.034058,59.349296]).addTo(map);
+     //   marker.setLngLat([18.034058,59.34929]);
+
+/*var marker = new Marker({
+  color: "#FFFFFF",
+  draggable: true
+  }).setLngLat([18.034058,59.349296])
+  .addTo(map);
+*/
+        //var marker = new Marker().center(center).addTo(map);
+        //.addTo(map);
+        return map;
       } catch {
         document.body.classList.remove('loading');
         return 'Error, check the query parameters.';
@@ -133,7 +151,7 @@ app.listen(port);
 parseMapStyles()
   .then(launchBrowser)
   .then(tabs => {
-    app.get('/map', (req, res) => {
+    app.get('/statmap', (req, res) => {
       const styleNames = tabs.map(tab => tab.name);
       const params = parseQuery(req.query, styleNames);
       const tab = getPage(tabs, params.style);
