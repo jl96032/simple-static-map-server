@@ -1,6 +1,6 @@
-import { Map, Marker } from 'https://cdn.skypack.dev/maplibre-gl@1';
+import maplibregl from 'https://cdn.skypack.dev/maplibre-gl@1';
 
-const map = new Map({
+const map = new maplibregl.Map({
   hash: true,
   maxZoom: 20,
   attributionControl: false,
@@ -12,11 +12,11 @@ const map = new Map({
 map.on('idle', () => {
   document.body.classList.remove('loading');
 });
-const marker = new Marker()
+/*
+const marker = new maplibregl.Marker()
 .setLngLat([30.5, 50.5]);
+*/
 
-
-  
-
+window.maplibregl = maplibregl;
 window.map = map;
-window.marker = marker;
+//window.marker = marker;

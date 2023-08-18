@@ -11,7 +11,7 @@
   },
   {
     "name": "enirovector",
-    "styleUrl": "https://ux14-geo-dev.herokuapp.com/osm_liberty.json",
+    "styleUrl": "https://rma-dev.eniro.com/osm_liberty.json",
     "minzoom": 0,
     "maxzoom": 18,
     "attribution": "© OpenStreetMap © ENIRO"

@@ -90,15 +90,18 @@ const getPage = (tabs, styleName) => {
   return tab.page;
 };
 
-async function fetchPicture(page, { width, height, center, zoom, type, timeout }) {
+async function fetchPicture(page, { width, height, center, markcenter, zoom, type, timeout }) {
   await page.setViewport({ width, height });
+  console.log("markcenter " + [...markcenter]);
   const error = await page.evaluate(
     view => {
       document.body.classList.add('loading');
       try {
         // will throw an exception if center coordinates are invalid
         map.jumpTo(view);
-        marker.setLngLat([18.034058,59.349296]).addTo(map);
+        const marker = new maplibregl.Marker().setLngLat([18.034058,59.349296]).addTo(map);
+        
+       // marker.setLngLat([18.034058,59.349296]).addTo(map);
      //   marker.setLngLat([18.034058,59.34929]);
 
 /*var marker = new Marker({
@@ -140,6 +143,7 @@ function parseQuery(query, styleNames) {
     height: Number(query.height) || 400,
     zoom: Number(query.zoom) || 3,
     center: query.center ? query.center.split(',').map(Number) : [0, 0],
+    markcenter: query.markcenter ? query.markcenter.split(',').map(Number) : [0, 0],
     type: Object.keys(mimeTypes).includes(query.type) ? query.type : 'png',
     style: query.style || styleNames[0],
     timeout: Number(query.timeout) || 30000,
@@ -154,6 +158,7 @@ parseMapStyles()
     app.get('/statmap', (req, res) => {
       const styleNames = tabs.map(tab => tab.name);
       const params = parseQuery(req.query, styleNames);
+      console.log([...params.markcenter]);
       const tab = getPage(tabs, params.style);
 
       fetchPicture(tab, params).then(({ error, buffer }) => {
